@@ -7,20 +7,23 @@ with open(f'{dir_path}/input') as f:
   puzzle_input = f.read().split('\n')[:-1]
 
 def parse_input():
-  return list(map(int, puzzle_input))
+  return set(map(int, puzzle_input))
 
-def find_2020_mul(l):
-  for i, n in enumerate(l):
-    for n2 in l[i+1:]:
-      if (n + n2) == 2020:
-        return n*n2
+def find_2020_mul(s):
+  for item in s:
+    look = 2020-item
 
-def find_2020_mul_3(l):
-  for i, n in enumerate(l):
-    for n2 in l[i+1:]:
-      for n3 in l[i+2:]:
-        if (n + n2 + n3) == 2020:
-          return n*n2*n3
+    if look in s:
+      return look * item
+
+def find_2020_mul_3(s):
+  iterable = list(s)
+  for i, n in enumerate(iterable):
+    for n2 in iterable[i+1:]:
+      look = 2020 - n - n2
+
+      if look in s:
+        return n*n2*look
 
 def part1():
   pi = parse_input()
