@@ -10,7 +10,7 @@ def parse_input():
   return puzzle_input[:]
 
 def count_trees_on_slope(right, down, tree_map):
-  x = y = 0
+  x,y = right,down
 
   trees = 0
 

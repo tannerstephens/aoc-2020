@@ -27,7 +27,7 @@ def part1():
     l, r = rule[0]
     n = rule[2].count(rule[1])
 
-    total += (n>=l) and (n<=r)
+    total += l <= n <= r
 
   return total
 
