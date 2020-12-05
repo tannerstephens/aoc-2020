@@ -9,51 +9,27 @@ with open(f'{dir_path}/input') as f:
 def parse_input():
   return puzzle_input[:]
 
-def get_row(boarding_pass):
-  l = 0
-  r = 127
+def get_seat_id2(boarding_pass):
+  b = ''
 
-  for c in boarding_pass[:7]:
-    delta = ((r - l)//2)+1
-    if c == "F":
-      r -= delta
-    else:
-      l += delta
-  return l
+  for c in boarding_pass:
+    b += '1' if c in 'BR' else '0'
 
-def get_seat(boarding_pass):
-  l = 0
-  r = 7
-
-  for c in boarding_pass[-3:]:
-    delta = ((r - l)//2)+1
-    if c == "L":
-      r -= delta
-    else:
-      l += delta
-
-  return l
-
-def get_seat_id(boarding_pass):
-  return get_row(boarding_pass)*8 + get_seat(boarding_pass)
+  return int(b, 2)
 
 def part1():
   pi = parse_input()
 
-  return max([get_seat_id(boarding_pass) for boarding_pass in pi])
+  return max(map(get_seat_id2, pi))
 
 def part2():
   pi = parse_input()
 
-  seats_ids = sorted([get_seat_id(boarding_pass) for boarding_pass in pi])
+  seat_ids = set(map(get_seat_id2, pi))
 
-  for i, sid in enumerate(seats_ids):
-    if (seats_ids[i+1] == sid+2):
-      return sid+1
-
-
-
-
+  for seat_id in seat_ids:
+    if (seat_id + 1) not in seat_ids:
+      return seat_id + 1
 
 def main():
   part1_res = part1()
