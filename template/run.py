@@ -4,7 +4,7 @@ from os.path import dirname, realpath
 dir_path = dirname(realpath(__file__))
 
 with open(f'{dir_path}/input') as f:
-  puzzle_input = f.read().split('\n')[:-1]
+  puzzle_input = f.read().split()
 
 def parse_input():
   return puzzle_input[:]
