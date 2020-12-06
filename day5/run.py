@@ -27,8 +27,9 @@ def part2():
   seat_ids = set(pi)
 
   for seat_id in seat_ids:
-    if (seat_id + 1) not in seat_ids and (seat_id+2) in seat_ids:
-      return seat_id + 1
+    target = seat_id + 1
+    if target not in seat_ids:
+      return target
 
 def main():
   part1_res = part1()
