@@ -15,17 +15,17 @@ def get_anyone_count_for_group(group):
   answers = set()
 
   for line in work:
-    answers.update(list(line))
+    answers.update(line)
 
   return len(answers)
 
 def get_everyone_count_for_group(group):
   work = group.split()
 
-  answers = set(list(work[0]))
+  answers = set(work[0])
 
   for line in work[1:]:
-    answers = answers.intersection(list(line))
+    answers = answers.intersection(line)
 
   return len(answers)
 
