@@ -14,7 +14,7 @@ INPUT_VALIDATION = {
   'byr': lambda year: 1920 <= int(year) <= 2002,
   'iyr': lambda year: 2010 <= int(year) <= 2020,
   'eyr': lambda year: 2020 <= int(year) <= 2030,
-  'hgt': lambda height: (height[-2:] == 'cm' and 150 <= int(height[:-2]) <= 193) or (height[-2:] == 'in' and 59 <= int(height[:-2]) <= 76),
+  'hgt': lambda height: (150 <= int(height[:-2]) <= 193) if height[-2:] == 'cm' else (59 <= int(height[:-2]) <= 76),
   'hcl': lambda color: match(r'^#[0-9a-f]{6}$', color),
   'ecl': lambda color: color in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'},
   'pid': lambda num: match(r'^\d{9}$', num)
