@@ -55,26 +55,25 @@ def create_bag_map(pi):
 
 
 def count_super_parents(bag, seen=set()):
-  if bag.type in seen:
-    return -1
-
   seen.add(bag.type)
 
-  total = len(bag.parents)
+  count = 0
 
   for parent in bag.parents:
-    total += count_super_parents(parent, seen)
+    if parent.type not in seen:
+      count += count_super_parents(parent, seen) + 1
 
-  return total
+  return count
+
 
 def count_internal_bags(bag, lookup={}):
   if bag.type in lookup:
     return lookup[bag.type]
 
-  total = sum([child[0] for child in bag.children])
+  total = 0
 
   for num, child in bag.children:
-    total += count_internal_bags(child, lookup)*num
+    total += num*(count_internal_bags(child, lookup) + 1)
 
   lookup[bag.type] = total
 
