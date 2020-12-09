@@ -11,6 +11,15 @@ from time import time
 
 DIR = path.dirname(path.abspath(__file__))
 
+def color_number(n, bad):
+  if n > bad:
+    return f'\u001b[31;1m{n}\u001b[0m'
+
+  if n > (bad/2):
+    return f'\u001b[33;1m{n}\u001b[0m'
+
+  return f'\u001b[32;1m{n}\u001b[0m'
+
 def load_all_days():
   days = {}
 
@@ -40,9 +49,12 @@ def run_day(days, day_num):
   part1_time, part1_res = exec_time(days[day_num].part1)
   part2_time, part2_res = exec_time(days[day_num].part2)
 
+  part1_time_text = color_number(part1_time, 2.5)
+  part2_time_text = color_number(part2_time, 2.5)
+
   print(f'Day {day_num}')
-  print(f'  Part 1: {part1_res} - {part1_time} ms')
-  print(f'  Part 2: {part2_res} - {part2_time} ms\n')
+  print(f'  Part 1: {part1_res} - {part1_time_text} ms')
+  print(f'  Part 2: {part2_res} - {part2_time_text} ms\n')
 
   return part1_time + part2_time
 
@@ -56,8 +68,13 @@ def run_all_days(days):
     time += run_day(days, day)
 
   time = round(time, 2)
+  per_day = color_number(round(time/len(days), 2), 5)
+  per_part = color_number(round(time/(len(days)* 2), 2), 2.5)
+  time = color_number(time, 5*len(days))
 
-  print(f'Total time: {time} ms\n')
+  print(f'Total time: {time} ms')
+  print(f'Average time per day: {per_day} ms')
+  print(f'Average time per part: {per_part} ms\n')
 
 def parse_arguments():
   parser = argparse.ArgumentParser()

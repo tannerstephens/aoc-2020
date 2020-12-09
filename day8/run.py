@@ -11,35 +11,31 @@ def parse_input():
 
 class VM:
   def __init__(self, insts=[]):
-    self.acc = 0
-    self.header = 0
-    self.insts = insts
-
-  def load_insts(self, insts):
     self.insts = insts
 
   def run(self):
+    acc = 0
+    header = 0
     l = len(self.insts)
 
     seen = set()
 
-    while self.header != l:
-      inst = self.insts[self.header]
+    while header != l:
+      inst = self.insts[header]
 
-      if self.header in seen:
-        return False, self.acc
+      if header in seen:
+        return False, acc
 
-      seen.add(self.header)
+      seen.add(header)
 
       if inst[0] == 'acc':
-        self.acc += inst[1]
+        acc += inst[1]
       elif inst[0] == 'jmp':
-        self.header += inst[1] - 1
+        header += inst[1] - 1
 
-      self.header += 1
+      header += 1
 
-    return True, self.acc
-
+    return True, acc
 
 def part1():
   pi = parse_input()
@@ -51,18 +47,20 @@ def part2():
 
   replace = {'nop': 'jmp', 'jmp': 'nop'}
 
+  vm = VM(pi)
+
   for i in range(len(pi)):
     inst = pi[i]
 
     if inst[0] in replace:
-      pi[i][0] = replace[inst[0]]
+      vm.insts[i][0] = replace[inst[0]]
 
-      status, res = VM(pi).run()
+      status, res = vm.run()
 
       if(status):
         return res
 
-      pi[i][0] = replace[inst[0]]
+      vm.insts[i][0] = replace[inst[0]]
 
 
 def main():
