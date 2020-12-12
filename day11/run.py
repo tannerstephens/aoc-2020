@@ -60,49 +60,35 @@ def simulate(board, die=4, extend=False):
 
   change = True
 
-  do_y = set(range(1, len(board)-1))
-  do_x = set(range(1, len(board[0])-1))
-
-  new_y = set()
-  new_x = set()
+  points = {(x, y) for y in range(len(board)) for x in range(len(board[0]))}
+  good_points = set()
 
   while change:
-    new_x.clear()
-    new_y.clear()
-
     change = False
-    for y in do_y:
-      y_change = False
-      for x in do_x:
-        if board[y][x] == '.':
-          continue
+    for x, y in points:
+      if board[y][x] == '.':
+        continue
 
-        count = count_alive(board, x, y, memo, extend)
-        if count == 0:
-          next_board[y][x] = '#'
-        elif count >= die:
-          next_board[y][x] = 'L'
-        else:
-          next_board[y][x] = board[y][x]
+      count = count_alive(board, x, y, memo, extend)
+      if count == 0:
+        next_board[y][x] = '#'
+      elif count >= die:
+        next_board[y][x] = 'L'
+      else:
+        next_board[y][x] = board[y][x]
 
-        x_change = (board[y][x] != next_board[y][x])
+      point_change = (board[y][x] != next_board[y][x])
 
-        if not y_change and x_change:
-          y_change = True
+      if point_change:
+        good_points.add((x,y))
 
-        if not change and y_change:
-          change = True
-
-        if x_change:
-          new_x.add(x)
-
-      if y_change:
-        new_y.add(y)
-
-    do_x, new_x = new_x, do_x
-    do_y, new_y = new_y, do_y
+      if not change and point_change:
+        change = True
 
     board, next_board = next_board, board
+    points, good_points = good_points, points
+
+    good_points.clear()
 
   s = 0
   for line in board:
