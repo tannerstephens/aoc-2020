@@ -48,7 +48,8 @@ def count_alive(board, x, y, memo, extend):
   count = 0
 
   for ly, lx in memo[y][x]:
-    count += board[ly][lx] == '#'
+    if board[ly][lx] == '#':
+      count += 1
 
   return count
 
@@ -59,24 +60,20 @@ def simulate(board, die=4, extend=False):
 
   change = True
 
-  min_y = 1
-  max_y = len(board)-1
+  do_y = set(range(1, len(board)-1))
+  do_x = set(range(1, len(board[0])-1))
 
-  min_x = 1
-  max_x = len(board[0])-1
+  new_y = set()
+  new_x = set()
 
   while change:
+    new_x.clear()
+    new_y.clear()
+
     change = False
-
-    new_min_y = inf
-    new_max_y = 0
-
-    new_min_x = inf
-    new_max_x = 0
-
-    for y in range(min_y, max_y):
+    for y in do_y:
       y_change = False
-      for x in range(min_x, max_x):
+      for x in do_x:
         if board[y][x] == '.':
           continue
 
@@ -89,29 +86,23 @@ def simulate(board, die=4, extend=False):
           next_board[y][x] = board[y][x]
 
         x_change = (board[y][x] != next_board[y][x])
-        y_change = y_change or x_change
-        change = change or y_change
+
+        if not y_change and x_change:
+          y_change = True
+
+        if not change and y_change:
+          change = True
 
         if x_change:
-          if x < new_min_x:
-            new_min_x = x
-
-          if x > new_max_x:
-            new_max_x = x
+          new_x.add(x)
 
       if y_change:
-        if y < new_min_y:
-          new_min_y = y
+        new_y.add(y)
 
-        if y > new_max_y:
-          new_max_y = y
+    do_x, new_x = new_x, do_x
+    do_y, new_y = new_y, do_y
 
-    min_y = new_min_y
-    max_y = new_max_y + 1
-    min_x = new_min_x
-    max_x = new_max_x + 1
-
-    board, next_board = (next_board, board)
+    board, next_board = next_board, board
 
   s = 0
   for line in board:
