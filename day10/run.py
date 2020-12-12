@@ -31,30 +31,18 @@ def part1():
   return ones*(threes+1)
 
 def num_ways_to_n(n, adapters, memo={0: 1}):
-  if n in memo:
-    return memo[n]
-
-  pos = range(n-3,n)
-
-  ways = 0
-
-  for k in pos:
-    if k in adapters:
-      ways += num_ways_to_n(k, adapters, memo)
-
-  memo[n] = ways
-
-  return ways
-
+  for v in adapters:
+    ways = 0
+    for pos in range(v-3, v):
+      ways += memo.get(pos, 0)
+    if v == n:
+      return ways
+    memo[v] = ways
 
 def part2():
-  pi = set(parse_input())
+  pi = sorted(parse_input())
 
-  pi.add(0)
-
-  m = max(pi)
-
-  return num_ways_to_n(m, pi)
+  return num_ways_to_n(pi[-1], pi)
 
 def main():
   part1_res = part1()
