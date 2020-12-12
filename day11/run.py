@@ -12,8 +12,6 @@ def parse_input():
 
   return out
 
-from math import inf
-
 def print_board(board):
   for line in board:
     print(''.join(line))
