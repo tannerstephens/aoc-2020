@@ -12,6 +12,8 @@ def parse_input():
 
   return out
 
+from math import inf
+
 def print_board(board):
   for line in board:
     print(''.join(line))
@@ -57,11 +59,24 @@ def simulate(board, die=4, extend=False):
 
   change = True
 
+  min_y = 1
+  max_y = len(board)-1
+
+  min_x = 1
+  max_x = len(board[0])-1
+
   while change:
     change = False
 
-    for y in range(1, len(board)-1):
-      for x in range(1, len(board[0])-1):
+    new_min_y = inf
+    new_max_y = 0
+
+    new_min_x = inf
+    new_max_x = 0
+
+    for y in range(min_y, max_y):
+      y_change = False
+      for x in range(min_x, max_x):
         if board[y][x] == '.':
           continue
 
@@ -73,7 +88,28 @@ def simulate(board, die=4, extend=False):
         else:
           next_board[y][x] = board[y][x]
 
-        change = change or (board[y][x] != next_board[y][x])
+        x_change = (board[y][x] != next_board[y][x])
+        y_change = y_change or x_change
+        change = change or y_change
+
+        if x_change:
+          if x < new_min_x:
+            new_min_x = x
+
+          if x > new_max_x:
+            new_max_x = x
+
+      if y_change:
+        if y < new_min_y:
+          new_min_y = y
+
+        if y > new_max_y:
+          new_max_y = y
+
+    min_y = new_min_y
+    max_y = new_max_y + 1
+    min_x = new_min_x
+    max_x = new_max_x + 1
 
     board, next_board = (next_board, board)
 
