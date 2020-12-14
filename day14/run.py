@@ -7,22 +7,19 @@ with open(f'{dir_path}/input') as f:
   puzzle_input = f.read().split('\n')[:-1]
 
 def parse_input():
-  out = []
   for line in puzzle_input:
     if line[:3] == 'mas':
-      out.append([
+      yield [
         'mask',
         line[7:]
-      ])
+      ]
     else:
       work = line[4:].split('] = ')
-      out.append([
+      yield [
         'mem',
         int(work[0]),
         int(work[1])
-      ])
-
-  return out
+      ]
 
 def mask(n, mask):
   n_bits = list(bin(n)[2:].zfill(len(mask)))
@@ -62,7 +59,7 @@ def part1():
     else:
       mem[inst[1]] = mask(inst[2], m)
 
-  return sum(mem.values())
+  return sum(mem.keys())
 
 def part2():
   pi = parse_input()
