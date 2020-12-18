@@ -99,7 +99,6 @@ def part2():
   s = 0
 
   for problem in pi:
-    print('###', problem)
     s += solve2(problem)
 
   return s
